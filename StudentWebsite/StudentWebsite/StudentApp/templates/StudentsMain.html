@@ -1,0 +1,46 @@
+{% extends "StudentsBase.html" %}
+{% load static %}
+
+{% block css_block %}
+	<link href="{{ STATIC_URL }}style.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js_block %}
+	function subjectOnChange(selectedVal) {
+		if (selectedVal == '---Select---') {
+			return False;
+		}
+		location = selectedVal;
+	}
+{% endblock %}
+
+{% block sidebar %}
+  	  <br/>
+	  {% for key, value in side_bar.items %}
+		    <b> <a href="{% url value %}">{{ key }} </a> </b> <br/><br/>
+	  {% endfor %}
+{% endblock %}
+
+{% block main %}
+	<form method="post">
+
+	<b> Select Subject : </b>  <br/>
+	<br/>
+	{% if subjects %}
+		<select id="selectSubject" ONCHANGE="subjectOnChange(this.options[this.selectedIndex].value)">
+		  <option value="---Select---">---Select---</option>
+			{% for eachSubject in subjects %}
+				<option value={% url 'getMarksDetailsView' eachSubject.name %}>{{eachSubject.name}}</option>
+			{% endfor %}
+		</select>
+	{% else %}
+		<p>No Subjects are available.</p>
+	{% endif %}
+
+	<br/> <br/> <br/>
+	
+	<div id="studentDetails"></div>
+	
+	</form>
+
+{% endblock %}

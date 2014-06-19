@@ -1,0 +1,94 @@
+{% extends "StudentsBase.html" %}
+{% load static %}
+
+{% block css_block %}
+	<link href="{{ STATIC_URL }}style.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js_block %}
+
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Percentage Distribution for {{ subjectName }}'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Browser share',
+            data: [
+			{% for eachRange, eachMarks in marksRange.items %}
+                [ '{{eachRange}}' , {{eachMarks}} ],
+			{% endfor %}
+            ]
+        }]
+    });
+});
+
+{% endblock %}
+
+{% block sidebar %}
+  	  <br/>
+	  {% for key, value in side_bar.items %}
+		    <b> <a href="{% url value %}">{{ key }} </a> </b> <br/><br/>
+	  {% endfor %}
+{% endblock %}
+
+{% block main %}
+	<form>
+	
+		<h2><b> Student Marks List for {{ subjectName }} : </b> </h2>
+		
+		<div id="container"  style="border: 2px solid; min-width: 310px; height: 300px; max-width: 500px; margin: 0 "></div>
+	
+	<br/><br/>	
+	<table border=1>
+	{% if subjectStudentDetails %}
+	    <tr >
+		     <th> Firstname</th>
+			 <th> Lastname</th>
+			 <th> Subject </th>   
+			 <th> Marks   </th>   
+		</tr>
+		{% for eachDetail in subjectStudentDetails %}
+            <tr>
+			    <td> {{ eachDetail.student__firstname }} </td>	
+		        <td> {{ eachDetail.student__lastname }} </td>
+				<td> {{ eachDetail.subject__name }} </td>
+		        <td> {{ eachDetail.marks }} </td>
+		    </tr>		 
+		{% endfor %}
+
+	{% else %}
+		<tr><td colspan=3 style="white-space: nowrap"><p>No Subjects are available.</p></td></tr>
+	{% endif %}
+	</table>
+
+	<br/><br/>
+    Average Subject Marks : {{ avgSubjectMarks }}
+	<br/><br/><br/>
+
+
+	</form>
+
+{% endblock %}

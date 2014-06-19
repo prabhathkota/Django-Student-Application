@@ -1,0 +1,25 @@
+BEGIN;
+CREATE TABLE `StudentApp_student` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `firstname` varchar(30) NOT NULL,
+    `lastname` varchar(50) NOT NULL
+)
+;
+CREATE TABLE `StudentApp_subject` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `name` varchar(10) NOT NULL
+)
+;
+CREATE TABLE `StudentApp_studentmarks` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `student_id` integer NOT NULL,
+    `subject_id` integer NOT NULL,
+    `marks` integer NOT NULL
+)
+;
+ALTER TABLE `StudentApp_studentmarks` ADD CONSTRAINT `student_id_refs_id_65878ced` FOREIGN KEY (`student_id`) REFERENCES `StudentApp_student` (`id`);
+ALTER TABLE `StudentApp_studentmarks` ADD CONSTRAINT `subject_id_refs_id_1d796027` FOREIGN KEY (`subject_id`) REFERENCES `StudentApp_subject` (`id`);
+CREATE INDEX `StudentApp_studentmarks_94741166` ON `StudentApp_studentmarks` (`student_id`);
+CREATE INDEX `StudentApp_studentmarks_56bb4187` ON `StudentApp_studentmarks` (`subject_id`);
+
+COMMIT;
